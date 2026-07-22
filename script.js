@@ -10,8 +10,11 @@ const heroPrice18 = document.getElementById('heroPrice18');
 const heroPrice24 = document.getElementById('heroPrice24');
 const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
+const refreshBtn = document.getElementById('refreshBtn');
+const lastUpdateEl = document.getElementById('lastUpdate');
 
 let prices = { 18: 0, 24: 0 };
+let lastUpdateTime = null;
 
 function formatNumber(num) {
     return new Intl.NumberFormat('fa-IR').format(Math.round(num));
@@ -27,6 +30,22 @@ function toToman(rial) {
     return Math.round(rial / 10);
 }
 
+function toPersianDigits(str) {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return String(str).replace(/\d/g, d => persianDigits[d]);
+}
+
+function formatTime(date) {
+    const h = date.getHours().toString().padStart(2, '0');
+    const m = date.getMinutes().toString().padStart(2, '0');
+    const s = date.getSeconds().toString().padStart(2, '0');
+    return toPersianDigits(h + ':' + m + ':' + s);
+}
+
+function formatDateTime(date) {
+    return toPersianDigits(date.toLocaleTimeString('fa-IR'));
+}
+
 function setStatus(type, text) {
     statusText.textContent = text;
     statusDot.className = 'update-dot';
@@ -35,9 +54,16 @@ function setStatus(type, text) {
     else statusDot.classList.add('dot-pulse');
 }
 
+function updateLastUpdate() {
+    if (lastUpdateTime) {
+        lastUpdateEl.textContent = 'آخرین بروزرسانی: ' + formatTime(lastUpdateTime);
+    }
+}
+
 async function fetchGoldPrice() {
     try {
         setStatus('loading', 'در حال دریافت قیمت...');
+        refreshBtn.classList.add('spinning');
 
         const response = await fetch(
             'https://api.tgju.org/v1/market/list-data?category_ids=91818&extra_data=1&lang=fa'
@@ -69,6 +95,8 @@ async function fetchGoldPrice() {
             heroPrice18.textContent = formatNumber(t18);
             heroPrice24.textContent = formatNumber(t24);
 
+            lastUpdateTime = new Date();
+            updateLastUpdate();
             updatePriceInput();
             setStatus('ok', 'بروزرسانی شد');
             calculate();
@@ -76,6 +104,8 @@ async function fetchGoldPrice() {
     } catch (error) {
         setStatus('error', 'خطا در دریافت قیمت');
         console.error('Error fetching gold price:', error);
+    } finally {
+        refreshBtn.classList.remove('spinning');
     }
 }
 
@@ -100,8 +130,9 @@ function calculate() {
 
     const baseValue = goldPriceTom * weight;
     const feeAmount = baseValue * (feePercent / 100);
-    const profitAmount = baseValue * (profitPercent / 100);
-    const total = baseValue + feeAmount + profitAmount;
+    const profitAmount = (baseValue + feeAmount) * (profitPercent / 100);
+    const taxAmount = (profitAmount + feeAmount) * 0.09;
+    const total = baseValue + feeAmount + profitAmount + taxAmount;
 
     const karat = parseInt(karatSelect.value);
 
@@ -121,8 +152,12 @@ function calculate() {
                     <span class="result-value">${formatNumber(feeAmount)} تومان</span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">سود فروش (${profitPercent}٪)</span>
+                    <span class="result-label">سود فروش (${profitPercent}٪ از ارزش طلا + اجرت)</span>
                     <span class="result-value">${formatNumber(profitAmount)} تومان</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">مالیات (۹٪ از سود + اجرت)</span>
+                    <span class="result-value">${formatNumber(taxAmount)} تومان</span>
                 </div>
                 <div class="result-row total">
                     <span class="result-label">قیمت نهایی فروش</span>
@@ -132,6 +167,8 @@ function calculate() {
         </div>
     `;
 }
+
+refreshBtn.addEventListener('click', fetchGoldPrice);
 
 karatSelect.addEventListener('change', () => {
     updatePriceInput();
