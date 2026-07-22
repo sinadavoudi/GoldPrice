@@ -9,7 +9,7 @@
     "orientation": "portrait-primary",
     "dir": "rtl",
     "lang": "fa",
-    "scope": "/",
+    "scope": "/GoldPrice",
     "icons": [
         {
             "src": "icons/icon-72.png",
