@@ -2,7 +2,7 @@
     "name": "محاسبه‌گر قیمت طلا",
     "short_name": "محاسبه‌گر طلا",
     "description": "محاسبه قیمت طلا بر اساس نرخ لحظه‌ای بازار ایران",
-    "start_url": "/",
+    "start_url": "/GoldPrice/",
     "display": "standalone",
     "background_color": "#f5f5f5",
     "theme_color": "#c8a951",
