@@ -186,6 +186,44 @@ body {
     50% { opacity: 0.4; transform: scale(0.8); }
 }
 
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-secondary);
+    padding: 0;
+}
+
+.refresh-btn:hover {
+    background: var(--border);
+    color: var(--gold);
+}
+
+.refresh-btn:active {
+    transform: scale(0.95);
+}
+
+.refresh-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.refresh-btn.spinning svg {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 /* Main Content */
 .main-content {
     padding: 30px 0 60px;
@@ -250,6 +288,25 @@ body {
     font-size: 0.78rem;
     color: var(--text-muted);
     margin-top: 2px;
+}
+
+.last-update-bar {
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.last-update-bar::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    display: inline-block;
 }
 
 /* Calculator Grid */
@@ -599,7 +656,7 @@ body {
         display: none;
     }
 
-    .header-status {
+    .header-status .status-text {
         display: none;
     }
 
