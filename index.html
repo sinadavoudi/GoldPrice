@@ -64,6 +64,13 @@
                     <div class="header-status">
                         <span class="update-dot" id="statusDot"></span>
                         <span class="status-text" id="statusText">در حال دریافت قیمت...</span>
+                        <button type="button" class="refresh-btn" id="refreshBtn" title="بروزرسانی قیمت">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <polyline points="1 20 1 14 7 14"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -87,6 +94,9 @@
                         <span class="hero-price-value" id="heroPrice24">—</span>
                         <span class="hero-price-unit">تومان</span>
                     </div>
+                </div>
+                <div class="last-update-bar">
+                    <span id="lastUpdate">آخرین بروزرسانی: —</span>
                 </div>
             </section>
 
@@ -171,13 +181,18 @@
                                 <li>عیار طلا را انتخاب کنید (۱۸ یا ۲۴)</li>
                                 <li>وزن خالص طلا را به گرم وارد کنید</li>
                                 <li>اجرت ساخت و سود فروش به صورت درصد اعمال می‌شود</li>
-                                <li>قیمت نهایی = ارزش طلا + اجرت + سود</li>
+                                <li>مالیات ۹٪ از مجموع سود و اجرت اعمال می‌شود</li>
+                                <li>قیمت نهایی = ارزش طلا + اجرت + سود + مالیات</li>
                             </ul>
                         </div>
                         <div class="info-card formula-card">
                             <h3>فرمول محاسبه</h3>
                             <div class="formula">
-                                <code>قیمت نهایی = ارزش طلا + اجرت ساخت + سود فروش</code>
+                                <code>ارزش طلا = قیمت × وزن</code>
+                                <code>اجرت ساخت = ارزش طلا × درصد اجرت</code>
+                                <code>سود فروش = (ارزش طلا + اجرت) × درصد سود</code>
+                                <code>مالیات = (سود + اجرت) × ۹٪</code>
+                                <code>قیمت نهایی = ارزش طلا + اجرت + سود + مالیات</code>
                             </div>
                         </div>
                     </div>
@@ -191,7 +206,7 @@
     <footer class="site-footer">
         <div class="container">
             <p>قیمت‌ها بر اساس داده‌های لحظه‌ای بازار تهران (tgju.org) است.</p>
-            <p class="footer-copy">طراحی شده با ❤</p>
+            <p class="footer-copy">طراحی شده توسط <a href="github.com/sinadavoudi">سینا داودی</a></p>
         </div>
     </footer>
 
